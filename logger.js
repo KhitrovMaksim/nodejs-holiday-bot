@@ -1,4 +1,5 @@
 const pino = require('pino');
+const { PRETTY_LOGGING } = require('./lib/data');
 
 const transportToConsole = pino.transport({
   target: 'pino-pretty',
@@ -16,6 +17,6 @@ const transportToFile = pino.transport({
   },
 });
 
-const logger = process.env.PRETTY_LOGGING === 'pino-pretty' ? pino(transportToConsole) : pino(transportToFile);
+const logger = PRETTY_LOGGING === 'pino-pretty' ? pino(transportToConsole) : pino(transportToFile);
 
 module.exports = logger;
