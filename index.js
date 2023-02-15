@@ -1,5 +1,5 @@
 const TelegramApi = require('node-telegram-bot-api');
-const { KHITROV_HOLIDAY_TOKEN: token, listOfCommands } = require('./lib/data');
+const { KHITROV_HOLIDAY_TOKEN: token, listOfCommands, flags } = require('./lib/data');
 const logger = require('./logger');
 const Commands = require('./lib/commands');
 
@@ -15,19 +15,26 @@ const start = () => {
     .then(() => logger.info('Commands are set'))
     .catch((err) => logger.error(`Commands are not set: ${err}`));
 
-  bot.on('message', async (msg) => {
-    const { text } = msg;
-    const chatId = msg.chat.id;
-    const { username } = msg.chat;
+  bot.on('message', async (requestFromChat) => {
+    const { text, chat } = requestFromChat;
+    const chatId = chat.id;
+    const { username } = chat;
 
     logger.info(`Request's string: ${text}; Username: ${username}; User id: ${chatId}`);
 
     const methodsDict = {
-      '/start': 'Hi!',
+      '/start': 'Please choose a flag!',
     };
     const message = methodsDict[text] || `"${text}" is not a command. Please try again!`;
 
-    return bot.sendMessage(chatId, message);
+    return bot.sendMessage(chatId, message, flags);
+  });
+
+  bot.on('callback_query', async (msg) => {
+    const { data, message } = msg;
+    const { chat } = message;
+    const chatId = chat.id;
+    logger.info(`Callback query data: ${data}; User id: ${chatId}`);
   });
 };
 
