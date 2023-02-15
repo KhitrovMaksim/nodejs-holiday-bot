@@ -22,7 +22,8 @@
     "start": "node index.js",
     "dev": "nodemon index.js",
     "lint": "eslint . && prettier -c \"**/*.js\"",
-    "format": "eslint . --fix && prettier --write \"**/*.js\""
+    "format": "eslint . --fix && prettier --write \"**/*.js\"",
+    "prepare": "husky install"
   },
   "dependencies": {
     "node-telegram-bot-api": "^0.61.0",
